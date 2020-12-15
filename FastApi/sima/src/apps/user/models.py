@@ -9,16 +9,16 @@ from src.utils.es_model import EsModel
 from src.utils.passwd import gen_password_hash
 
 
-class Token(BaseModel):
+class TokenModel(BaseModel):
     access_token: str
     token_type: str
 
 
-class TokenData(BaseModel):
+class TokenDataModel(BaseModel):
     username: Optional[str] = None
 
 
-class User(EsModel):
+class UserModel(EsModel):
     _index_name = "users"
     _pk_no_arr = ["username"]
     username: Optional[str] = "admin"
@@ -28,7 +28,7 @@ class User(EsModel):
     is_superuser: Optional[bool] = True
 
 
-class UserInDB(User):
+class UserInDBMode(UserModel):
     hashed_password: Optional[str] = Field("admin", alias="password")
 
     def save(self) -> True:
@@ -36,7 +36,7 @@ class UserInDB(User):
         super().save()
 
 
-class InitEsConn(EsModel):
+class InitEsConnModel(EsModel):
     _index_name = ""
     _time_out = 3
     _pk_no_arr = ["setting_es_host", "setting_es_port"]

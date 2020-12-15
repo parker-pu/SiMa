@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # openssl rand -hex 32
 SECRET_KEY = 'wpdx&o!@(mt$xacf^p+o+3nn*h!y6_7x3%d=a0^go8b7_69dw6'
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 ORIGINS = ["*"]
 

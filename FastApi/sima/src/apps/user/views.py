@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from starlette import status
-from src.apps.user.models import TokenData, User, UserInDB, InitEsConn
+from src.apps.user.models import TokenDataModel, UserModel, UserInDBMode, InitEsConnModel
 from src.settings import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from src.utils.log import logger
 from src.utils.passwd import verify_password
@@ -15,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
 
 
 def get_user(username: str):
-    u = UserInDB(username=username)
+    u = UserInDBMode(username=username)
     u.load()
     return u
 
@@ -52,7 +52,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenDataModel(username=username)
     except JWTError:
         raise credentials_exception
     user = get_user(username=token_data.username)
@@ -61,7 +61,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
+async def get_current_active_user(current_user: UserModel = Depends(get_current_user)):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -87,7 +87,7 @@ async def gen_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-async def init_superuser(init_data: InitEsConn, user: UserInDB):
+async def init_superuser(init_data: InitEsConnModel, user: UserInDBMode):
     revoke_data: dict = {
         "es_conn": False,
         "add_user": False

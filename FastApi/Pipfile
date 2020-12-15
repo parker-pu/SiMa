@@ -14,6 +14,8 @@ bcrypt = "*"
 aiofiles = "*"
 elasticsearch = "*"
 loguru = "*"
+sqlalchemy = "*"
+pymysql = "*"
 
 [dev-packages]
 

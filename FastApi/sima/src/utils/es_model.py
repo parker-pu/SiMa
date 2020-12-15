@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import os
-from typing import Optional
-
 from src.utils.log import logger
 from datetime import datetime
 from pydantic import BaseModel
@@ -15,6 +13,7 @@ from src.utils.utils import gen_md5
 class EsModel(BaseModel):
     _index_name: str = None
     _pk_no_arr = []
+    _data_ignore = []
 
     create_time: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     update_time: str = None
@@ -24,7 +23,8 @@ class EsModel(BaseModel):
 
     @property
     def gen_pk_md5(self):
-        return gen_md5("##".join([str(getattr(self, line)) for line in self._pk_no_arr]))
+        data = json.loads(self.json())
+        return gen_md5("##".join([str(data.get(line)) for line in self._pk_no_arr]))
 
     def conn(self) -> True:
         if os.path.exists(CONN_PATH):
@@ -46,10 +46,10 @@ class EsModel(BaseModel):
 
     def load(self) -> True:
         try:
-            data: dict = self.conn().get(index=self._index_name, id=self.gen_pk_md5, ignore=[404, ])
-            if not data.get("found"):
+            his: dict = self.conn().get(index=self._index_name, id=self.gen_pk_md5, ignore=[404, ])
+            if not his.get("found"):
                 return False
-            self.crawl(**data.get("_source", {}))
+            self.crawl(**his.get("_source", {}))
         except Exception as e:
             self._Logger.error(e)
             return False
@@ -57,8 +57,10 @@ class EsModel(BaseModel):
     def save(self) -> True:
         self.update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         data: dict = json.loads(self.json())
-        for item_key in data.keys():
+        for item_key in list(data.keys()):
             if item_key.startswith("_"):
+                data.pop(item_key)
+            if item_key in self._data_ignore:
                 data.pop(item_key)
         try:
             if self.conn().exists(index=self._index_name, id=self.gen_pk_md5):
