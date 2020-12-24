@@ -11,7 +11,7 @@ from src.settings import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from src.utils.log import logger
 from src.utils.passwd import verify_password
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/token")
 
 
 def get_user(username: str):

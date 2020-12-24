@@ -1,3 +1,3 @@
-from src.apps import user, dictionary
+from src.apps import user, dictionary, comment
 
-__all__ = [user, dictionary]
+__all__ = [user, dictionary, comment]

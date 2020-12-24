@@ -6,7 +6,6 @@ from pydantic import BaseModel, IPvAnyAddress
 from sqlalchemy.orm import sessionmaker
 
 from src.utils.es_model import EsModel
-import re
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
@@ -18,8 +17,16 @@ class DBEnum(str, Enum):
 
 
 class DBStatus(str, Enum):
-    use = 1
-    fail = 0
+    USE = 1
+    FAIL = 0
+
+
+class TableBaseModel(BaseModel):
+    db_host: Optional[IPvAnyAddress] = '127.0.0.1'
+    db_port: Optional[int] = 3306
+    db_type: Optional[DBEnum] = 'mysql'
+    db_name: Optional[str]
+    table_name: Optional[str]
 
 
 class DBBase(BaseModel):
@@ -35,7 +42,7 @@ class DBBase(BaseModel):
 class RDBMModel(EsModel):
     """ 这个类是用来操作数据库的基类
     """
-    table_name: str
+    table_name: str = None
     db_conf: DBBase
 
     @contextmanager
@@ -86,6 +93,8 @@ class RDBMModel(EsModel):
             for one_table in batch_table:
                 yield one_table
 
-    def show_create_table(self):
-        desc_table_sql = "show create table {}".format(self.table_name)
+    def show_create_table(self, table_name: str = None):
+        if not table_name and not self.table_name:
+            return None
+        desc_table_sql = "show create table {}".format(self.table_name if self.table_name else table_name)
         return self.execute(sql=desc_table_sql)[0][1]

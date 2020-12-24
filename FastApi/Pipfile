@@ -16,6 +16,8 @@ elasticsearch = "*"
 loguru = "*"
 sqlalchemy = "*"
 pymysql = "*"
+cryptography = "*"
+apscheduler = "*"
 
 [dev-packages]
 
