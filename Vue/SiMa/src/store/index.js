@@ -27,7 +27,7 @@ export default createStore({
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          storage.set(ACCESS_TOKEN, response.access_token, 1 * 24 * 60 * 60);
+          storage.set(ACCESS_TOKEN, response.access_token, 1 * 12 * 60 * 60);
           commit("SET_TOKEN", response.access_token);
           commit("SET_TOKEN_TYPE", response.token_type);
           resolve()

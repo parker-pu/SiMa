@@ -20,7 +20,9 @@
         <template #overlay>
           <a-menu @click="handleMenuClick">
             <a-menu-item key="1"><IdcardOutlined />个人信息</a-menu-item>
-            <a-menu-item key="2"><SettingFilled />设置</a-menu-item>
+            <a-menu-item key="2" v-if="userInfo.is_superuser">
+              <SettingFilled />设置
+            </a-menu-item>
             <a-menu-item key="3"><LogoutOutlined />退出</a-menu-item>
           </a-menu>
         </template>
@@ -59,6 +61,36 @@
       </a-button>
     </div>
   </a-drawer>
+
+  <!-- userInfo -->
+  <a-spin :spinning="spinning">
+    <a-modal v-model:visible="visibleUser" title="用户" @ok="handleOk">
+      <template #footer>
+        <a-button key="back" @click="handleCancel">
+          取消
+        </a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loading"
+          @click="handleOk"
+        >
+          提交
+        </a-button>
+      </template>
+      <a-form :model="userInfo" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="全名" name="full_name">
+          <a-input v-model:value="userInfo.full_name"></a-input>
+        </a-form-item>
+        <a-form-item label="Email" name="email">
+          <a-input v-model:value="userInfo.email"></a-input>
+        </a-form-item>
+        <a-form-item label="密码" name="password">
+          <a-input v-model:value="userInfo.password"></a-input>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+  </a-spin>
 </template>
 
 <script>
@@ -72,6 +104,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons-vue";
 import { mapActions } from "vuex";
+import { getUserInfoApi, putUserInfoApi } from "../../api/user";
 
 export default {
   components: {
@@ -85,14 +118,48 @@ export default {
   },
   data() {
     return {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
       visible: false,
       size: "large",
       date: "",
+      userInfo: {},
+      spinning: false,
+      visibleUser: false,
+      loading: false,
     };
   },
-
+  created() {
+    this.getUserInfoData();
+  },
   methods: {
     ...mapActions(["Logout"]),
+    editUserInfo() {},
+    handleOk() {
+      this.loading = true;
+      putUserInfoApi(this.userInfo)
+        .then(() => {
+          this.$notification.success({
+            message: "修改",
+            description: "修改成功",
+          });
+        })
+        .catch(() => {})
+        .finally(() => {
+          this.loading = false;
+          this.visibleUser = false;
+        });
+    },
+    handleCancel() {
+      this.visibleUser = false;
+    },
+    getUserInfoData() {
+      getUserInfoApi()
+        .then((rsp) => {
+          this.userInfo = rsp;
+        })
+        .catch(() => {});
+    },
     currentTime() {
       setInterval(this.formatDate, 500);
     },
@@ -127,6 +194,7 @@ export default {
       console.log("click", e.key);
       switch (e.key) {
         case "1":
+          this.visibleUser = true;
           break;
         case "2":
           this.visible = true;

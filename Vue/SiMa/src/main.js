@@ -30,7 +30,8 @@ import {
     Collapse,
     Timeline,
     Tooltip,
-    Comment
+    Comment,
+    Switch,
 } from 'ant-design-vue';
 
 import { message,notification } from 'ant-design-vue'
@@ -68,6 +69,7 @@ app.use(Collapse);
 app.use(Timeline);
 app.use(Tooltip);
 app.use(Comment);
+app.use(Switch);
 
 app.config.globalProperties.$message = message;
 app.config.globalProperties.$notification = notification;

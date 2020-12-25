@@ -105,7 +105,7 @@ export default {
       spinning: false,
       addDBForm: {},
       dataSource: [],
-      count: 1,
+      count: null,
       edidTitle: "新增",
       columns: [
         {
@@ -149,9 +149,10 @@ export default {
   methods: {
     getDBConnList() {
       getDBConnApi()
-        .then((response) => {
+        .then((rsp) => {
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
-          this.dataSource = response;
+          this.dataSource = rsp.data;
+          this.count = rsp.total_nums;
         })
         .catch((error) => {
           // catch 指请求出错的处理
@@ -159,12 +160,11 @@ export default {
         });
     },
     onDelete(line) {
+      this.spinning = true;
       delDBConnApi(line)
         .then((res) => this.delSuccess(res))
         .catch((err) => this.delFailed(err))
-        .finally(() => {
-          this.spinning = true;
-        });
+        .finally(() => {});
     },
     delSuccess() {
       // 延迟 1 秒显示欢迎信息

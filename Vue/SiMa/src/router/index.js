@@ -1,60 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/user/Login.vue";
 import store from '../store'
 import storage from 'store'
 import { ACCESS_TOKEN } from '../store/mutation-types'
-
-const routes = [
-  {
-    path: "/login",
-    name: "login",
-    component: Login,
-  },
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-    hidden: true,
-    meta: {
-      requiresAuth: true
-    },
-    children: [
-      {
-        path: "search",
-        name: "search",
-        component: () => import("@/views/search/Search"),
-        meta: {
-          requiresAuth: true
-        },
-      },
-      {
-        path: "tableInfo",
-        name: "tableInfo",
-        component: () => import("@/views/search/TableInfo"),
-        meta: {
-          requiresAuth: true
-        },
-      },
-      {
-        path: "user",
-        name: "user",
-        component: () => import("@/views/user/UserInfo"),
-        meta: {
-          requiresAuth: true
-        },
-      },
-      {
-        path: "db",
-        name: "db",
-        component: () => import("@/views/setting/DataBase"),
-        meta: {
-          requiresAuth: true
-        },
-      },
-    ]
-  },
-];
+import {routes} from './routerList'
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

@@ -16,12 +16,12 @@
             <a-menu-item key="1">
               统计
             </a-menu-item>
-            <a-menu-item key="2">
+            <!-- <a-menu-item key="2">
               扫描记录
             </a-menu-item>
             <a-menu-item key="3">
               血缘
-            </a-menu-item>
+            </a-menu-item> -->
           </a-menu>
         </a-col>
         <a-col :span="8">
@@ -39,12 +39,7 @@
       </a-row>
     </a-layout-header>
     <a-layout-content :style="{ padding: '0 50px' }">
-      <a-breadcrumb :style="{ margin: '16px 0' }">
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item>List</a-breadcrumb-item>
-        <a-breadcrumb-item>App</a-breadcrumb-item>
-      </a-breadcrumb>
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '500px' }">
+      <div id="body">
         <router-view />
       </div>
     </a-layout-content>
@@ -62,7 +57,7 @@ export default {
   name: "home",
   data() {
     return {
-      selectedKeys: ["2"],
+      selectedKeys: ["1"],
       searchValue: "",
     };
   },
@@ -82,9 +77,12 @@ export default {
 #components-layout-demo-top .logo {
   width: 120px;
   height: 31px;
-  background: rgba(255, 255, 255, 0.2);
   margin: 2px 2px 2px 0;
   float: left;
+
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url(../../public/logo.png);
 }
 
 #components-layout-demo-top .search {
@@ -102,5 +100,14 @@ export default {
 
 #components-layout-demo-top .ant-layout-header {
   height: 35px;
+}
+
+#body {
+  background: rgba(255, 255, 255, 0);
+  padding: 24px;
+}
+
+.ant-layout {
+  height: 100%;
 }
 </style>

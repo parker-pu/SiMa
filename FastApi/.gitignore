@@ -10,6 +10,9 @@ __pycache__/
 *.log
 sima.logs
 
+# data
+sima/conn.json
+
 # .idea
 sima/.idea
 

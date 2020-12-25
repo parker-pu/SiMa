@@ -4,7 +4,8 @@ const qs = require('querystring')
 const userApi = {
   Login: '/api/user/token',
   Logout: '/api/user/token',
-  UserInfo: '/api/user/me/'
+  UserInfo: '/api/user/me',
+  UserList: '/api/user/user-info'
 }
 
 
@@ -16,7 +17,7 @@ export function login (parameter) {
   })
 }
 
-export function getInfo () {
+export function getUserInfoApi () {
   return request({
     url: userApi.UserInfo,
     method: 'get',
@@ -26,6 +27,38 @@ export function getInfo () {
   })
 }
 
+export function putUserInfoApi (data) {
+  return request({
+    url: userApi.UserInfo,
+    method: 'put',
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function delUserInfoApi (data) {
+  return request({
+    url: userApi.UserList,
+    method: 'delete',
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+
+export function getUserListApi () {
+  return request({
+    url: userApi.UserList,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
 
 export function logout () {
   return request({
