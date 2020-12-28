@@ -4,6 +4,7 @@
 
 - 本地安装仅需关注 FastApi 这个文件夹即可
 - 第一次安装，如果 “SiMa\FastApi\sima” 目录下有 conn.json 这个文件需要删掉，这个文件是记录初始化的相关数据
+![初始化配置文件](https://github.com/parker-pu/SiMa/blob/main/docs/imgs/%E7%94%9F%E6%88%90%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png)
 
 ### 安装步骤
 
