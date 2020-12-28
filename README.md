@@ -13,7 +13,7 @@
 
 ### 安装
 
-- [本地安装]()
+- [本地安装](https://github.com/parker-pu/SiMa/blob/main/docs/LocalInstall.md)
 - [Nginx 模式安装]()
 - [Docker 模式安装]()
 - [开发模式]()
