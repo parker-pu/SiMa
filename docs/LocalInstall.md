@@ -32,3 +32,5 @@ python3 manage.py
   - 超级用户账号
   - 超级用户密码
  ![初始化](https://github.com/parker-pu/SiMa/blob/main/docs/imgs/%E5%88%9D%E5%A7%8B%E5%8C%96.png)
+
+- 之后即可开始使用
