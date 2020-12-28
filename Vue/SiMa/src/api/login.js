@@ -1,38 +1,36 @@
-import request from '../utils/request'
-const qs = require('querystring')
+import request from "../utils/request";
+const qs = require("querystring");
 
 const userApi = {
-  Login: '/api/user/token',
-  Logout: '/api/user/token',
-  UserInfo: '/api/user/me/'
-}
+  Login: "/api/token",
+  Logout: "/api/token",
+  UserInfo: "/api/user/me/"
+};
 
-
-export function login (parameter) {
+export function login(parameter) {
   return request({
     url: userApi.Login,
-    method: 'post',
+    method: "post",
     data: qs.stringify(parameter)
-  })
+  });
 }
 
-export function getInfo () {
+export function getInfo() {
   return request({
     url: userApi.UserInfo,
-    method: 'get',
+    method: "get",
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }
 
-
-export function logout () {
+export function logout() {
   return request({
     url: userApi.Logout,
-    method: 'post',
+    method: "post",
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }

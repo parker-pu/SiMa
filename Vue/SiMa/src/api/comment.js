@@ -1,40 +1,40 @@
-import request from '../utils/request'
+import request from "../utils/request";
 // const qs = require('querystring')
 
 const commentApi = {
-  Comment: '/api/comment',
-}
+  Comment: "/api/comment"
+};
 
-export function getCommentApi (table_info) {
+export function getCommentApi(table_info) {
   return request({
     url: commentApi.Comment,
-    method: 'post',
+    method: "post",
     data: table_info,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }
 
-export function putCommentApi (content,table_input) {
+export function putCommentApi(content, table_input) {
   return request({
-    url:  commentApi.Comment,
-    method: 'put',
+    url: commentApi.Comment,
+    method: "put",
     params: content,
     data: table_input,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }
 
-export function delCommentApi (comm) {
+export function delCommentApi(comm) {
   return request({
-    url:  commentApi.Comment,
-    method: 'delete',
+    url: commentApi.Comment,
+    method: "delete",
     data: comm,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }

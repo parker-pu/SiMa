@@ -20,6 +20,10 @@ class ScanConnDBSettingModel(EsModel):
 
     status: Optional[DBStatus]
 
+    @property
+    def index_name(self):
+        return self._index_name
+
 
 class TableBaseModel(BaseModel):
     db_host: Optional[IPvAnyAddress] = '127.0.0.1'

@@ -58,4 +58,4 @@ async def del_conn(conn: ScanConnDBSettingModel):
 @router.post("/table-column")
 async def table_column_list(table: TableBaseModel):
     h = HistoryTableColumnModel(**json.loads(table.json()))
-    return h.list()
+    return h.table_list()

@@ -38,16 +38,16 @@ import { RightCircleOutlined } from "@ant-design/icons-vue";
 export default {
   name: "newTable",
   components: {
-    RightCircleOutlined,
+    RightCircleOutlined
   },
   props: {
-    new_search_data: String,
+    new_search_data: String
   },
   data() {
     return {
       search_data: "",
       search_result_data: [],
-      spinning: false,
+      spinning: false
     };
   },
   created() {
@@ -66,8 +66,8 @@ export default {
           db_port: data.db_port,
           db_type: data.db_type,
           db_name: data.db_name,
-          table_name: data.table_name,
-        },
+          table_name: data.table_name
+        }
       });
     },
     updateHandel() {
@@ -79,8 +79,8 @@ export default {
     searchData() {
       this.spinning = true;
       searchDataApi(this.search_data)
-        .then((res) => this.searchSuccess(res))
-        .catch((err) => this.searchFailed(err))
+        .then(res => this.searchSuccess(res))
+        .catch(err => this.searchFailed(err))
         .finally(() => {});
       setTimeout(() => {
         this.spinning = false;
@@ -91,7 +91,7 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: "成功",
-          description: "搜索成功",
+          description: "搜索成功"
         });
         this.search_result_data = res.data;
       }, 1000);
@@ -102,10 +102,10 @@ export default {
         description:
           ((err.response || {}).data || {}).message ||
           "请求出现错误，请稍后再试",
-        duration: 4,
+        duration: 4
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

@@ -45,7 +45,7 @@ async def put_comment(content: str, table: TableBaseModel, current_user: UserMod
 @router.post("/comment")
 async def get_comment(table: TableBaseModel):
     c = CommentModel(**json.loads(table.json()))
-    return c.list()
+    return c.table_list()
 
 
 @router.delete("/comment")

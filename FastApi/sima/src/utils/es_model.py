@@ -48,6 +48,10 @@ class EsModel(BaseModel):
         }
 
     @property
+    def get_index_name(self):
+        return self._index_name
+
+    @property
     def gen_pk_md5(self):
         data = json.loads(self.json())
         return gen_md5("##".join([str(data.get(line)) for line in self._pk_no_arr]))
@@ -136,7 +140,7 @@ class EsModel(BaseModel):
             self._Logger.error(e)
             return False
 
-    def list(self, page: int = 0, size: int = 10, *args, **kwargs) -> True:
+    def table_list(self, page: int = 0, size: int = 10, *args, **kwargs) -> True:
         try:
             d = json.loads(self.json())
             select_body = {

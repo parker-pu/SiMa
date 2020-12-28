@@ -1,14 +1,19 @@
-
 import Home from "../views/Home.vue";
 import Login from "../views/user/Login.vue";
-export const BASE_PATH = "/"
+export const BASE_PATH = "/";
 
 export const routes = [
   {
     path: "/login",
     name: "login",
     component: Login,
-    breadcrumbName: "Login",
+    breadcrumbName: "Login"
+  },
+  {
+    path: "/isInit",
+    name: "isInit",
+    component: () => import("@/views/first/SuperUser"),
+    breadcrumbName: "isInit"
   },
   {
     path: BASE_PATH,
@@ -16,10 +21,20 @@ export const routes = [
     component: Home,
     hidden: true,
     breadcrumbName: "Home",
+    redirect: "/static",
     meta: {
       requiresAuth: true
     },
     children: [
+      {
+        path: "static",
+        name: "static",
+        component: () => import("@/views/dashBoard/Static"),
+        breadcrumbName: "Static",
+        meta: {
+          requiresAuth: true
+        }
+      },
       {
         path: "search",
         name: "search",
@@ -27,7 +42,7 @@ export const routes = [
         breadcrumbName: "Search",
         meta: {
           requiresAuth: true
-        },
+        }
       },
       {
         path: "tableInfo",
@@ -36,7 +51,7 @@ export const routes = [
         breadcrumbName: "TableInfo",
         meta: {
           requiresAuth: true
-        },
+        }
       },
       {
         path: "user",
@@ -45,7 +60,7 @@ export const routes = [
         breadcrumbName: "User",
         meta: {
           requiresAuth: true
-        },
+        }
       },
       {
         path: "db",
@@ -54,9 +69,8 @@ export const routes = [
         breadcrumbName: "DB",
         meta: {
           requiresAuth: true
-        },
-      },
+        }
+      }
     ]
-  },
+  }
 ];
-

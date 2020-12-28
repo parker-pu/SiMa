@@ -74,7 +74,8 @@
         layout="vertical"
       >
         <a-form-item label="评论" name="content">
-          <a-input v-model:value="addCommForm.content"></a-input>
+          <a-textarea v-model:value="addCommForm.content" />
+          <!-- <a-input v-model:value="addCommForm.content"></a-input> -->
         </a-form-item>
       </a-form>
     </a-modal>
@@ -88,7 +89,7 @@ import { PlusCircleTwoTone } from "@ant-design/icons-vue";
 export default {
   name: "commentList",
   components: {
-    PlusCircleTwoTone,
+    PlusCircleTwoTone
   },
   data() {
     return {
@@ -102,11 +103,11 @@ export default {
       wrapperCol: { span: 24 },
       loading: false,
       addCommForm: {
-        content: null,
+        content: null
       },
       table_input: this.$route.query,
       spinning: false,
-      comment_data: [],
+      comment_data: []
     };
   },
   created() {
@@ -130,14 +131,14 @@ export default {
     handleOk() {
       this.loading = true;
       putCommentApi(this.addCommForm, this.table_input)
-        .then((res) => this.addSuccess(res))
-        .catch((err) => this.addFailed(err))
+        .then(res => this.addSuccess(res))
+        .catch(err => this.addFailed(err))
         .finally(() => {});
     },
     addSuccess() {
       this.$notification.success({
         message: "成功",
-        description: "添加成功",
+        description: "添加成功"
       });
 
       // off
@@ -157,7 +158,7 @@ export default {
       this.spinning = true;
       setTimeout(() => {
         getCommentApi(this.table_input)
-          .then((res) => this.getCommentSuccess(res))
+          .then(res => this.getCommentSuccess(res))
           .catch(() => (this.spinning = false))
           .finally(() => {});
       }, 1000);
@@ -171,13 +172,13 @@ export default {
     delComment(line) {
       console.log(line);
       delCommentApi(line)
-        .then((res) => this.getCommentList(res))
+        .then(res => this.getCommentList(res))
         .catch()
         .finally(() => {});
     },
 
-    cancel() {},
-  },
+    cancel() {}
+  }
 };
 </script>
 

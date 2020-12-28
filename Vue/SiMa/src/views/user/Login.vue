@@ -43,6 +43,7 @@
 <script>
 import { mapActions } from "vuex";
 import { timeFix } from "../../utils/util";
+import { isInitApi } from "../../api/superUser";
 
 export default {
   name: "login",
@@ -63,40 +64,64 @@ export default {
       loginForm: {
         // 表单v-moda的值
         username: "",
-        password: "",
+        password: ""
       },
       rules: {
         username: [
           {
             required: true,
             message: "Please input user name",
-            trigger: "blur",
+            trigger: "blur"
           },
           {
             min: 1,
             max: 50,
             message: "Length should be 1 to 50",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         password: [
-          { required: true, validator: validatePass, trigger: "change" },
-        ],
-      },
+          { required: true, validator: validatePass, trigger: "change" }
+        ]
+      }
     };
+  },
+  created() {
+    this.isInit();
   },
   methods: {
     ...mapActions(["Login", "Logout"]),
+    isInit() {
+      isInitApi()
+        .then(rsp => this.initUserSuccess(rsp))
+        .catch()
+        .finally();
+    },
+    initUserSuccess(rsp) {
+      if (rsp === false) {
+        // 跳转到指定的路由
+        this.$router.push({
+          name: "isInit"
+        });
+        // 延迟 1 秒显示欢迎信息
+        setTimeout(() => {
+          this.$notification.warning({
+            message: "初始化",
+            description: "需要初始化"
+          });
+        }, 1000);
+      }
+    },
     onSubmit() {
       this.$refs.refLoginForm
         .validate()
         .then(() => {
           this.Login(this.loginForm)
-            .then((res) => this.loginSuccess(res))
-            .catch((err) => this.requestFailed(err))
+            .then(res => this.loginSuccess(res))
+            .catch(err => this.requestFailed(err))
             .finally(() => {});
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("error", error);
         });
     },
@@ -107,18 +132,18 @@ export default {
       let redirectUrl = decodeURIComponent(this.$route.query.redirect || "/");
       // 跳转到指定的路由
       this.$router.push({
-        path: redirectUrl,
+        path: redirectUrl
       });
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
           message: "欢迎",
-          description: `${timeFix()}，欢迎回来`,
+          description: `${timeFix()}，欢迎回来`
         });
       }, 1000);
     },
-    requestFailed() {},
-  },
+    requestFailed() {}
+  }
 };
 </script>
 <style scoped></style>

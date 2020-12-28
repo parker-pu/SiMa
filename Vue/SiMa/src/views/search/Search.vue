@@ -16,17 +16,17 @@ export default {
   name: "search",
   data() {
     return {
-      new_search_data: this.$route.query.search,
+      new_search_data: this.$route.query.search
     };
   },
   components: {
-    NewTable,
+    NewTable
   },
   created() {},
   updated() {
     this.new_search_data = this.$route.query.search;
   },
-  methods: {},
+  methods: {}
 };
 </script>
 <style></style>

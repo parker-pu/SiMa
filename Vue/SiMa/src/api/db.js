@@ -1,38 +1,38 @@
-import request from '../utils/request'
+import request from "../utils/request";
 // const qs = require('querystring')
 
 const dictionary = {
-  dbConn: 'api/dictionary/db-conn',
-}
+  dbConn: "api/dictionary/db-conn"
+};
 
-export function getDBConnApi () {
+export function getDBConnApi() {
   return request({
     url: dictionary.dbConn,
-    method: 'get',
+    method: "get",
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }
 
-export function addDBConnApi (parameter) {
+export function addDBConnApi(parameter) {
   return request({
     url: dictionary.dbConn,
-    method: 'put',
+    method: "put",
     data: parameter,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }
 
-export function delDBConnApi (parameter) {
+export function delDBConnApi(parameter) {
   return request({
     url: dictionary.dbConn,
-    method: 'delete',
+    method: "delete",
     data: parameter,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      "Content-Type": "application/json;charset=UTF-8"
     }
-  })
+  });
 }

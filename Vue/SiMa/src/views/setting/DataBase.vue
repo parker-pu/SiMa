@@ -94,7 +94,7 @@ import { ClearOutlined, EditOutlined } from "@ant-design/icons-vue";
 export default {
   components: {
     ClearOutlined,
-    EditOutlined,
+    EditOutlined
   },
   data() {
     return {
@@ -112,35 +112,35 @@ export default {
           title: "主机地址",
           dataIndex: "db_host",
           width: "10%",
-          slots: { customRender: "db_host" },
+          slots: { customRender: "db_host" }
         },
         {
           title: "数据库名称",
-          dataIndex: "db_name",
+          dataIndex: "db_name"
         },
         {
           title: "端口",
-          dataIndex: "db_port",
+          dataIndex: "db_port"
         },
         {
           title: "数据库类型",
           dataIndex: "db_type",
-          slots: { customRender: "db_type" },
+          slots: { customRender: "db_type" }
         },
         {
           title: "用户名",
-          dataIndex: "username",
+          dataIndex: "username"
         },
         {
           title: "更新时间",
-          dataIndex: "update_time",
+          dataIndex: "update_time"
         },
         {
           title: "操作",
           dataIndex: "operation",
-          slots: { customRender: "operation" },
-        },
-      ],
+          slots: { customRender: "operation" }
+        }
+      ]
     };
   },
   created() {
@@ -149,12 +149,12 @@ export default {
   methods: {
     getDBConnList() {
       getDBConnApi()
-        .then((rsp) => {
+        .then(rsp => {
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
           this.dataSource = rsp.data;
           this.count = rsp.total_nums;
         })
-        .catch((error) => {
+        .catch(error => {
           // catch 指请求出错的处理
           console.log(error);
         });
@@ -162,8 +162,8 @@ export default {
     onDelete(line) {
       this.spinning = true;
       delDBConnApi(line)
-        .then((res) => this.delSuccess(res))
-        .catch((err) => this.delFailed(err))
+        .then(res => this.delSuccess(res))
+        .catch(err => this.delFailed(err))
         .finally(() => {});
     },
     delSuccess() {
@@ -171,7 +171,7 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: "删除",
-          description: "删除成功",
+          description: "删除成功"
         });
 
         // off
@@ -185,7 +185,7 @@ export default {
         description:
           ((err.response || {}).data || {}).message ||
           "请求出现错误，请稍后再试",
-        duration: 4,
+        duration: 4
       });
 
       // off
@@ -206,8 +206,8 @@ export default {
     },
     addDB() {
       addDBConnApi(this.addDBForm)
-        .then((res) => this.addSuccess(res))
-        .catch((err) => this.addFailed(err))
+        .then(res => this.addSuccess(res))
+        .catch(err => this.addFailed(err))
         .finally(() => {});
     },
     addSuccess() {
@@ -215,7 +215,7 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: "成功",
-          description: "添加成功",
+          description: "添加成功"
         });
 
         // off
@@ -230,7 +230,7 @@ export default {
         description:
           ((err.response || {}).data || {}).message ||
           "请求出现错误，请稍后再试",
-        duration: 4,
+        duration: 4
       });
 
       // off
@@ -241,8 +241,8 @@ export default {
       this.visible = true;
       this.edidTitle = "编辑";
       this.addDBForm = line;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less">

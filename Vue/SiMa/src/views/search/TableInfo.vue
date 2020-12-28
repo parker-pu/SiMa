@@ -106,7 +106,7 @@ export default {
   name: "tableInfo",
   components: {
     ClockCircleOutlined,
-    CommentList,
+    CommentList
   },
   data() {
     return {
@@ -114,7 +114,7 @@ export default {
       table_column_data: "",
       new_table_info: {},
       new_table_spinning: false,
-      table_column_spinning: false,
+      table_column_spinning: false
     };
   },
   created() {
@@ -132,8 +132,8 @@ export default {
     getTableData() {
       this.new_table_spinning = true;
       getTableApi(this.table_input)
-        .then((res) => this.newTableSuccess(res))
-        .catch((err) => this.newTableFailed(err))
+        .then(res => this.newTableSuccess(res))
+        .catch(err => this.newTableFailed(err))
         .finally(() => {});
     },
     newTableSuccess(res) {
@@ -146,8 +146,8 @@ export default {
     tableColumnData() {
       this.table_column_spinning = true;
       tableColumnApi(this.table_input)
-        .then((res) => this.tableColumnSuccess(res))
-        .catch((err) => this.tableColumnFailed(err))
+        .then(res => this.tableColumnSuccess(res))
+        .catch(err => this.tableColumnFailed(err))
         .finally(() => {});
     },
     tableColumnSuccess(res) {
@@ -156,8 +156,8 @@ export default {
     },
     tableColumnFailed() {
       this.table_column_spinning = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

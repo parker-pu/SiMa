@@ -104,14 +104,14 @@ import {
   CloseCircleOutlined,
   EditOutlined,
   CheckOutlined,
-  ClearOutlined,
+  ClearOutlined
 } from "@ant-design/icons-vue";
 export default {
   components: {
     CloseCircleOutlined,
     EditOutlined,
     ClearOutlined,
-    CheckOutlined,
+    CheckOutlined
   },
   data() {
     return {
@@ -130,36 +130,36 @@ export default {
           title: "用户名",
           dataIndex: "username",
           width: "10%",
-          slots: { title: "customTitle", customRender: "username" },
+          slots: { title: "customTitle", customRender: "username" }
         },
         {
           title: "Email",
-          dataIndex: "email",
+          dataIndex: "email"
         },
         {
           title: "全名",
-          dataIndex: "full_name",
+          dataIndex: "full_name"
         },
         {
           title: "失效",
           dataIndex: "disabled",
-          slots: { customRender: "disabled" },
+          slots: { customRender: "disabled" }
         },
         {
           title: "超级用户",
           dataIndex: "is_superuser",
-          slots: { customRender: "is_superuser" },
+          slots: { customRender: "is_superuser" }
         },
         {
           title: "更新时间",
-          dataIndex: "update_time",
+          dataIndex: "update_time"
         },
         {
           title: "操作",
           dataIndex: "operation",
-          slots: { customRender: "operation" },
-        },
-      ],
+          slots: { customRender: "operation" }
+        }
+      ]
     };
   },
   created() {
@@ -172,8 +172,8 @@ export default {
     onDelete(line) {
       this.useSpinning = true;
       delUserInfoApi(line)
-        .then((res) => this.delSuccess(res))
-        .catch((err) => this.delFailed(err))
+        .then(res => this.delSuccess(res))
+        .catch(err => this.delFailed(err))
         .finally(() => {});
     },
     delSuccess() {
@@ -181,7 +181,7 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: "删除",
-          description: "删除成功",
+          description: "删除成功"
         });
 
         // off
@@ -195,7 +195,7 @@ export default {
         description:
           ((err.response || {}).data || {}).message ||
           "请求出现错误，请稍后再试",
-        duration: 4,
+        duration: 4
       });
 
       // off
@@ -228,7 +228,7 @@ export default {
       this.useSpinning = true;
       setTimeout(() => {
         getUserListApi()
-          .then((rsp) => {
+          .then(rsp => {
             this.dataSource = rsp.data;
             this.count = rsp.total_nums;
           })
@@ -237,10 +237,10 @@ export default {
             this.useSpinning = false;
           });
       }, 1000);
-    },
+    }
   },
   mounted() {},
-  beforeUnmount() {},
+  beforeUnmount() {}
 };
 </script>
 <style scoped></style>

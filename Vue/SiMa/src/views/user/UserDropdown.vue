@@ -53,7 +53,7 @@
         textAlign: 'right',
         left: 0,
         background: '#fff',
-        borderRadius: '0 0 4px 4px',
+        borderRadius: '0 0 4px 4px'
       }"
     >
       <a-button type="primary" @click="onClose">
@@ -101,7 +101,7 @@ import {
   DatabaseOutlined,
   UserSwitchOutlined,
   ClockCircleOutlined,
-  UserOutlined,
+  UserOutlined
 } from "@ant-design/icons-vue";
 import { mapActions } from "vuex";
 import { getUserInfoApi, putUserInfoApi } from "../../api/user";
@@ -114,7 +114,7 @@ export default {
     DatabaseOutlined,
     UserSwitchOutlined,
     ClockCircleOutlined,
-    UserOutlined,
+    UserOutlined
   },
   data() {
     return {
@@ -126,7 +126,7 @@ export default {
       userInfo: {},
       spinning: false,
       visibleUser: false,
-      loading: false,
+      loading: false
     };
   },
   created() {
@@ -141,7 +141,7 @@ export default {
         .then(() => {
           this.$notification.success({
             message: "修改",
-            description: "修改成功",
+            description: "修改成功"
           });
         })
         .catch(() => {})
@@ -155,7 +155,7 @@ export default {
     },
     getUserInfoData() {
       getUserInfoApi()
-        .then((rsp) => {
+        .then(rsp => {
           this.userInfo = rsp;
         })
         .catch(() => {});
@@ -176,7 +176,7 @@ export default {
         "星期三",
         "星期四",
         "星期五",
-        "星期六",
+        "星期六"
       ];
       let hour = date.getHours(); // 时
       hour = hour < 10 ? "0" + hour : hour; // 如果只有一位，则前面补零
@@ -201,10 +201,7 @@ export default {
           break;
         case "3":
           this.Logout();
-          this.$router.push({
-            // 跳转到登录页面
-            name: "login",
-          });
+          this.$router.push({ name: "login" });
           break;
         default:
           console.log("click", e.key);
@@ -215,16 +212,16 @@ export default {
     },
     onUser() {
       this.$router.push({
-        name: "user",
+        name: "user"
       });
       this.visible = false;
     },
     onDB() {
       this.$router.push({
-        name: "db",
+        name: "db"
       });
       this.visible = false;
-    },
+    }
   },
   mounted() {
     this.currentTime();
@@ -233,7 +230,7 @@ export default {
     if (this.date) {
       clearInterval(this.date); // 在Vue实例销毁前，清除我们的定时器
     }
-  },
+  }
 };
 </script>
 <style scoped>

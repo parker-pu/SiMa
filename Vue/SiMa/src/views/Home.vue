@@ -11,6 +11,7 @@
             theme="dark"
             mode="horizontal"
             v-model:selectedKeys="selectedKeys"
+            @click="banaCheck"
             :style="{ lineHeight: '35px' }"
           >
             <a-menu-item key="1">
@@ -52,25 +53,35 @@
 import UserDropdown from "./user/UserDropdown";
 export default {
   components: {
-    UserDropdown,
+    UserDropdown
   },
   name: "home",
   data() {
     return {
       selectedKeys: ["1"],
-      searchValue: "",
+      searchValue: ""
     };
   },
   methods: {
+    banaCheck(e) {
+      console.log("click", e.key);
+      switch (e.key) {
+        case "1":
+          this.$router.push({ name: "static" });
+          break;
+        default:
+          console.log("click", e.key);
+      }
+    },
     onSearch(value) {
       this.$router.push({
         name: "search",
         query: {
-          search: value,
-        },
+          search: value
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

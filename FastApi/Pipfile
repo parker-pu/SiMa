@@ -18,6 +18,7 @@ sqlalchemy = "*"
 pymysql = "*"
 cryptography = "*"
 apscheduler = "*"
+jinja2 = "*"
 
 [dev-packages]
 

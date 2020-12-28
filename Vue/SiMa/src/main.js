@@ -4,38 +4,37 @@ import router from "./router";
 import store from "./store";
 
 import {
-    Button,
-    Row,
-    Col,
-    Table,
-    Form,
-    Input,
-    Tabs,
-    Layout,
-    Breadcrumb,
-    Menu,
-    Avatar,
-    Dropdown,
-    Drawer,
-    Statistic,
-    Tag,
-    Popconfirm,
-    Modal,
-    Select,
-    Spin,
-    Radio,
-    Space,
-    Descriptions,
-    List,
-    Collapse,
-    Timeline,
-    Tooltip,
-    Comment,
-    Switch,
-} from 'ant-design-vue';
+  Button,
+  Row,
+  Col,
+  Table,
+  Form,
+  Input,
+  Tabs,
+  Layout,
+  Breadcrumb,
+  Menu,
+  Avatar,
+  Dropdown,
+  Drawer,
+  Statistic,
+  Tag,
+  Popconfirm,
+  Modal,
+  Select,
+  Spin,
+  Radio,
+  Space,
+  Descriptions,
+  List,
+  Collapse,
+  Timeline,
+  Tooltip,
+  Comment,
+  Switch
+} from "ant-design-vue";
 
-import { message,notification } from 'ant-design-vue'
-
+import { message, notification } from "ant-design-vue";
 
 const app = createApp(App);
 app.use(router);
@@ -76,4 +75,4 @@ app.config.globalProperties.$notification = notification;
 
 app.mount("#app");
 
-app.config.productionTip = false
+app.config.productionTip = false;

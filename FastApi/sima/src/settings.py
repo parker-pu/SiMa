@@ -16,8 +16,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 ORIGINS = ["*"]
 
-DEBUG = True
-RELOAD = True
+DEBUG = False
+RELOAD = False
 
 # manage
 HOST = '0.0.0.0'
