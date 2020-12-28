@@ -8,7 +8,10 @@ __pycache__/
 
 # log
 *.log
-sima.logs
+sima/logs
+
+# setting
+sima/conn.json
 
 # data
 sima/conn.json
