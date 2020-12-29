@@ -6,6 +6,7 @@
 
 - 前端
   - Vue 3
+  - Ant UI
 - 后端
   - Python 3.10
   - FastAPI
@@ -19,13 +20,31 @@
 - [开发模式]()
 
 ### 使用手册
-- 管理员模块（用户管理及数据库管理）
-- 搜索模块
-- 评论模块
+
+- [管理员模块（用户管理及数据库管理）](https://github.com/parker-pu/SiMa/blob/main/docs/AdminManage.md)
+- [搜索模块](https://github.com/parker-pu/SiMa/blob/main/docs/SearchModel.md)
+- [评论模块](https://github.com/parker-pu/SiMa/blob/main/docs/CommentModel.md)
+- [普通模块](https://github.com/parker-pu/SiMa/blob/main/docs/OrdinaryModel.md)
 
 ### 展望
+
+- 分页，目前后端分页完成，前端还未添加
 - 表结构通过 binlog 同步
 - 增加评论信息的搜索
 - 增加日志功能
-- 增加类似 navicat 的数据查询功能（RDBMS及Hive）
-- 增加相关钩子函数，解析SQL,构建元数据
+- 增加类似 navicat 的数据查询功能（RDBMS 及 Hive）
+- 增加相关钩子函数，解析 SQL,构建元数据
+
+### API
+
+- Swagger UI
+
+```shell
+http://127.0.0.1:80/docs
+```
+
+- ReDoc
+
+```shell
+http://127.0.0.1:80/redoc
+```

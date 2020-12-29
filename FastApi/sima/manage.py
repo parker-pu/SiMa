@@ -61,4 +61,6 @@ if __name__ == '__main__':
         log_level=LOG_LEVEL,
         debug=DEBUG,
         reload=RELOAD,
+        use_colors=True,
+        forwarded_allow_ips="*",
     )

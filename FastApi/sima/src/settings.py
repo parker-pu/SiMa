@@ -37,9 +37,9 @@ SYNC_DATA_SECONDS = 3 * 60
 # MIDDLEWARES
 MIDDLEWARE = {
     CORSMiddleware: {
-        "allow_origins": ORIGINS
-        , "allow_credentials": True
-        , "allow_methods": ["*"],
+        "allow_origins": ORIGINS,
+        "allow_credentials": True,
+        "allow_methods": ["*"],
         "allow_headers": ["*"]
     },
 }
