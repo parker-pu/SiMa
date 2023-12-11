@@ -8,7 +8,7 @@
   - Vue 3
   - Ant UI
 - 后端
-  - Python 3.10
+  - Python 3.11
   - FastAPI
   - Elasticsearch
 
@@ -48,3 +48,7 @@ http://127.0.0.1:80/docs
 ```shell
 http://127.0.0.1:80/redoc
 ```
+
+### 版本历程
+- v1: (2020-12-29) 数据字典功能
+- 2023.12 计划增加自动生成接口的功能
