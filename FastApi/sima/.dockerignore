@@ -1,0 +1,9 @@
+# comment
+**/*.md
+**/*.pyc
+.git
+.idea
+
+# 忽略文档
+docs
+*.log

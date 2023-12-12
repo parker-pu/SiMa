@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加动态API</title>
+    <script src="/static/js/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript">
+        function add_or_update_data() {
+            var subject_name = document.getElementById("subject_name").value;
+            var api_name = document.getElementById("api_name").value;
+            var api_desc = document.getElementById("api_desc").value;
+            var api_version = document.getElementById("api_version").value;
+            var methods_data = document.getElementById("methods_data").value;
+            var jinja_content = document.getElementById("jinja_content").value;
+            var inner_validate = document.getElementById("inner_validate").value;
+            var custom_validate = document.getElementById("custom_validate").value;
+            var target_desc = document.getElementById("target_desc").value;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/bg-smartreport-lite/api/dynamic-api/add/',
+                contentType: "application/json",
+                data:JSON.stringify({
+                    "subject_name": subject_name,
+                    "api_name": api_name,
+                    "api_desc": api_desc,
+                    "api_version": api_version,
+                    "methods": JSON.parse(methods_data),
+                    "jinja_content": jinja_content,
+                    "inner_validate": JSON.parse(inner_validate),
+                    "custom_validate": JSON.parse(custom_validate),
+                    "target_desc": JSON.parse(target_desc)
+                }),
+                success: function (result) {
+                    if (result.code == 0) {
+                        alert("提交成功");
+                    }else {
+                        alert("提交失败")
+                    }
+                }
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<form action="" id="loginForm" class="fh5co-form animate-box" onsubmit="return false" method="post"
+      data-animate-effect="fadeInLeft">
+    <h2>动态接口</h2>
+    <div class="form-group">
+        <label for="subject_name" class="sr-only">主题名称</label>
+        <input type="text" class="form-control" id="subject_name" name="subject_name" placeholder="subject_name"
+               autocomplete="off" value="{{ subject_name }}">
+    </div>
+    <div class="form-group">
+        <label for="api_name" class="sr-only">接口名称</label>
+        <input type="text" class="form-control" id="api_name" name="subject_name" placeholder="api_name"
+               autocomplete="off" value="{{ api_name }}">
+    </div>
+    <div class="form-group">
+        <label for="api_desc" class="sr-only">接口描述</label>
+        <input type="text" class="form-control" id="api_desc" name="api_desc" placeholder="api_desc"
+               autocomplete="off" value="{{ api_desc }}">
+    </div>
+    <div class="form-group">
+        <label for="api_version" class="sr-only">API版本</label>
+        <input type="text" class="form-control" id="api_version" name="api_version" placeholder="api_version"
+               autocomplete="off" value="{{ api_version }}">
+    </div>
+    <div class="form-group">
+        <label for="methods_data" class="sr-only">请求方式</label>
+        <input type="text" class="form-control" id="methods_data" name="methods_data" placeholder="methods_data"
+               autocomplete="off" value="{{ methods }}">
+    </div>
+    <div class="form-group">
+        <label for="jinja_content" class="sr-only">jinja内容</label>
+        <textarea id="jinja_content" name="txtInfo" rows="30" cols="200">{{ jinja_content }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="inner_validate" class="sr-only">内部验证器</label>
+        <input type="text" class="form-control" id="inner_validate" name="api_version" placeholder="inner_validate"
+               autocomplete="off" value="{{ inner_validate }}">
+    </div>
+    <div class="form-group">
+        <label for="custom_validate" class="sr-only">自定义验证器</label>
+        <textarea id="custom_validate" name="txtInfo" rows="10" cols="200">{{ custom_validate }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="target_desc" class="sr-only">指标描述</label>
+        <textarea id="target_desc" name="txtInfo" rows="10" cols="200">{{ target_desc }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="button" onclick="add_or_update_data()" value="提交" class="btn btn-primary">
+    </div>
+</form>
+</body>
+
+</html>

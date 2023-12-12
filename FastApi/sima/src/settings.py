@@ -16,8 +16,18 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 ORIGINS = ["*"]
 
-DEBUG = False
-RELOAD = False
+DEBUG = True
+RELOAD = True
+
+# db
+DB_HOST = "127.0.0.1"
+DB_USER = "root"
+DB_PASSWORD = "123456"
+
+# 缓存
+CACHE_TIME = 10
+
+CURRENT_VERSION = 2023.12  # 当前最新版本
 
 # manage
 HOST = '0.0.0.0'

@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+pydantic = "*"
+#pydantic = {extras = ["email"], version = "*"}
+python-multipart = "*"
+python-jose = "*"
+passlib = "*"
+bcrypt = "*"
+aiofiles = "*"
+elasticsearch = "*"
+loguru = "*"
+sqlalchemy = "*"
+pymysql = "*"
+cryptography = "*"
+apscheduler = "*"
+jinja2 = "*"
+fastapi-cache2 = "*"
+xlsxwriter = "*"
+openpyxl = "*"
+orjson = "*"
+fastapi-pagination = "*"
+sqlalchemy-utils = "*"
+aiomysql = "*"
+greenlet = "*"
+alembic = "*"
+asgiref = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
