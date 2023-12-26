@@ -5,30 +5,26 @@
 
 路由
 """
-import json
-from pathlib import Path
 from typing import List, Dict
 
 from fastapi import APIRouter, Depends, Request
 from pydantic import Field, create_model
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from src.apps.dynamic_api import model
+from src.apps.dynamic_api.models import DynamicAPIDataModel
 from src.apps.dynamic_api.validate import DynamicApiValidate
 from src.apps.dynamic_api.views import (
-    get_current_version_iter,
     all_dynamic_api_view,
     get_dynamic_api_data_view,
-    add_or_update_dynamic_api_data_view,
+    add_dynamic_api_data_view,
     select_dynamic_api_view,
-    dynamic_api_model_view
+    dynamic_api_model_view,
+    update_dynamic_api_data_view,
+    update_dynamic_api_status_view
 )
-from src.settings import BASE_DIR
-from src.utils import error_code
 from src.utils.db.aiodb import get_db_session, get_sync_db_session
-from src.utils.resp import RespJsonBase, resp_error_json
+from src.utils.resp import RespJsonBase
 from src.validators import (
     ValidateTimeData,
     ValidatePaginator,
@@ -50,8 +46,8 @@ cls_index = {
 
 # 查询数据库,找到所有表
 db = get_sync_db_session()
-for row in db.query(model.DynamicAPIDataModel).filter(model.DynamicAPIDataModel.api_status == True):
-    if not isinstance(row, model.DynamicAPIDataModel):
+for row in db.query(DynamicAPIDataModel).filter(DynamicAPIDataModel.api_status == True):
+    if not isinstance(row, DynamicAPIDataModel):
         continue
 
     api_json = row.to_dict()
@@ -131,11 +127,10 @@ async def get_current_dynamic_api_data(subject_name: str, api_name: str,
     :param db_session:
     :return:
     """
-    print(subject_name)
     return await get_dynamic_api_data_view(db_session, subject_name, api_name)
 
 
-@router.get("/dynamic-api/{subject_name}/{api_name}/{api_version}.json", tags=["dynamic_api"],
+@router.get("/dynamic-api/{subject_name}/{api_name}/{api_version}/", tags=["dynamic_api"],
             description="获取动态API数据", name="获取动态API数据", response_model=RespJsonBase)
 async def get_dynamic_api_data(subject_name: str, api_name: str, api_version: str,
                                db_session: AsyncSession = Depends(get_db_session)):
@@ -152,51 +147,63 @@ async def get_dynamic_api_data(subject_name: str, api_name: str, api_version: st
 
 @router.post("/dynamic-api/add/", tags=["dynamic_api"], name="增加动态API数据",
              description="增加动态API数据", response_model=RespJsonBase)
-async def add_dynamic_api_data(d: DynamicApiValidate):
+async def add_dynamic_api_data(d: DynamicApiValidate, db_session: AsyncSession = Depends(get_db_session)):
     """
     增加动态API数据
     :param d: 数据
+    :param db_session: 数据库
     :return:
     """
-    return await add_or_update_dynamic_api_data_view(d)
+    return await add_dynamic_api_data_view(d, db_session)
 
 
 @router.put("/dynamic-api/update/{subject_name}/{api_name}/{api_version}/", tags=["dynamic_api"],
-            description="获取动态API数据", name="获取动态API数据", response_model=RespJsonBase)
-async def put_dynamic_api_data(subject_name: str, api_name: str, api_version: str, d: DynamicApiValidate):
+            description="修改动态API数据", name="修改动态API数据", response_model=RespJsonBase)
+async def put_dynamic_api_data(d: DynamicApiValidate, db_session: AsyncSession = Depends(get_db_session)):
     """
-    获取动态API数据
-    :param subject_name:
-    :param api_name:
-    :param api_version:
+    修改动态API数据
     :param d: 数据
+    :param db_session: 数据
     :return:
     """
-    if not Path(f"{BASE_DIR}/dynamic_api_data/{subject_name}/{api_name}/{api_version}.json").exists():
-        return resp_error_json(error=error_code.ERROR_FILE_NOT_EXISTS_ERROR)
-    return await add_or_update_dynamic_api_data_view(d)
+    return await update_dynamic_api_data_view(d, db_session)
 
 
-@router.get("/dynamic-api/html/add/", tags=["dynamic_api"], description="html动态API",
-            name="html动态API", response_class=HTMLResponse)
-async def add_html_dynamic_api_data(request: Request, subject_name: str = None, api_name: str = None,
-                                    api_version: str = None):
+@router.post("/dynamic-api/update_status/{subject_name}/{api_name}/{api_version}/", tags=["dynamic_api"],
+             description="修改api状态&上下线", name="修改api状态&上下线", response_model=RespJsonBase)
+async def put_dynamic_api_status_data(subject_name: str, api_name: str, api_version: str, api_status: bool,
+                                      db_session: AsyncSession = Depends(get_db_session)):
     """
-    html动态API数据
-    :param request:
+    修改api状态&上下线
     :param subject_name:
     :param api_name:
-    :param api_version:
+    :param api_version: api 版本
+    :param api_status: api 状态
+    :param db_session: 数据
     :return:
     """
-    jsn_data = {"request": request}
-    if api_version:
-        _file_path = f"{BASE_DIR}/dynamic_api_data/{subject_name}/{api_name}/{api_version}.json"
-    else:
-        _file_path = get_current_version_iter(Path(f"{BASE_DIR}/dynamic_api_data/{subject_name}/{api_name}/").iterdir())
-    if Path(_file_path).exists():
-        jk = ["inner_validate", "custom_validate", "target_desc", "methods"]
-        for k, v in json.load(fp=open(_file_path, "r", encoding="utf-8")).items():
-            jsn_data[k] = json.dumps(v, ensure_ascii=False) if k in jk else v
-    jsn_data["methods"] = '["POST"]' if "methods" not in jsn_data else jsn_data.get("methods")
-    return templates.TemplateResponse("add_dynamic_api.html", jsn_data)
+    return await update_dynamic_api_status_view(subject_name, api_name, api_version, api_status, db_session)
+
+# @router.get("/dynamic-api/html/add/", tags=["dynamic_api"], description="html动态API",
+#             name="html动态API", response_class=HTMLResponse)
+# async def add_html_dynamic_api_data(request: Request, subject_name: str = None, api_name: str = None,
+#                                     api_version: str = None):
+#     """
+#     html动态API数据
+#     :param request:
+#     :param subject_name:
+#     :param api_name:
+#     :param api_version:
+#     :return:
+#     """
+#     jsn_data = {"request": request}
+#     if api_version:
+#         _file_path = f"{BASE_DIR}/dynamic_api_data/{subject_name}/{api_name}/{api_version}.json"
+#     else:
+#         _file_path = get_current_version_iter(Path(f"{BASE_DIR}/dynamic_api_data/{subject_name}/{api_name}/").iterdir())
+#     if Path(_file_path).exists():
+#         jk = ["inner_validate", "custom_validate", "target_desc", "methods"]
+#         for k, v in json.load(fp=open(_file_path, "r", encoding="utf-8")).items():
+#             jsn_data[k] = json.dumps(v, ensure_ascii=False) if k in jk else v
+#     jsn_data["methods"] = '["POST"]' if "methods" not in jsn_data else jsn_data.get("methods")
+#     return templates.TemplateResponse("add_dynamic_api.html", jsn_data)

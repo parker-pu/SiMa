@@ -5,26 +5,32 @@ from typing import Optional
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-from src.apps.user.models import UserInDBMode
+from src.apps.user.models import UserModel
 from src.settings import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from src.utils.db.aiodb import get_db_session
 from src.utils.passwd import verify_password
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/token")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="api/token",
+    scopes={"me": "Read information about the current user.", "items": "Read items."},
+)
 
 
-def get_user(username: str):
-    u = UserInDBMode(username=username)
-    u.load()
+async def get_user(db_session, username: str) -> UserModel:
+    result = await db_session.execute(select(UserModel).where(UserModel.username == username))
+    u: UserModel = result.scalars().one()
     return u
 
 
-def authenticate_user(username: str, password: str):
+async def authenticate_user(db_session, username: str, password: str):
     """ authenticate user """
-    user = get_user(username)
+    user = await get_user(db_session, username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.password):
         return False
     return user
 
@@ -40,21 +46,20 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-async def gen_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def gen_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db_session=None):
     """ Login to get access Token
 
     :param form_data: input data
+    :param db_session:
     :return:
     """
-    user = authenticate_user(form_data.username, form_data.password)
+    user = await authenticate_user(db_session, form_data.username, form_data.password)
+
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.username, "scopes": form_data.scopes},
+        expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}

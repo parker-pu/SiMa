@@ -79,7 +79,7 @@ def resp_error_json(error: ErrorBase, *, msg: Optional[str] = None, msg_append: 
         status_code=status_code,
         content={
             "code": error.code,
-            "msg": (msg or error.msg) + ",[" + msg_append + "]",
+            "msg": (msg or error.msg) + ((",[" + msg_append + "]") if msg_append else ""),
             "data": data or {}
         }
     )

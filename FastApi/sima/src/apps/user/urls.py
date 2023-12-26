@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
-from src.apps.user.models import UserModel, UserInDBMode
+from sqlalchemy import update, select, Result
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.apps.user.models import UserModel
+from src.apps.user.validate import UserValidate, ChangeUserValidate
 from src.apps.user.views import get_current_active_user
-from src.settings import SUCCESS_DATA
+from src.utils.db.aiodb import get_db_session
+from src.utils.resp import resp_success_json
+from src.utils.utils import delete_dict_none
 
 router = APIRouter(
     prefix="/user",
@@ -11,33 +19,29 @@ router = APIRouter(
 )
 
 
-@router.get("/me", response_model=UserModel)
-async def get_users_me(current_user: UserModel = Depends(get_current_active_user)):
+@router.get("/me", response_model=UserValidate)
+async def read_users_me(current_user: Annotated[UserModel, Depends(get_current_active_user)]):
     return current_user
 
 
 @router.put("/me")
-async def put_users_me(user: UserInDBMode, current_user: UserInDBMode = Depends(get_current_active_user)):
-    if not user.hashed_password:
-        user.hashed_password = current_user.hashed_password
-    user.save()
-    return SUCCESS_DATA
+async def put_users_me(
+        user: ChangeUserValidate,
+        current_user: Annotated[UserModel, Depends(get_current_active_user)],
+        db_session: Annotated[AsyncSession, Depends(get_db_session)],
+):
+    sql = (update(UserModel).where(UserModel.username == str(current_user.username))
+           .values(**delete_dict_none(user.model_dump())))
+    async with db_session.begin():
+        await db_session.execute(sql)
+    return resp_success_json({})
 
 
 @router.get("/user-info")
-async def get_users(user: UserModel = Depends(get_current_active_user)):
-    search_data = user.all_list()
-    user_list = []
-    for line in search_data.get("data", []):
-        if not isinstance(line, (dict,)):
-            continue
-        line.pop("hashed_password")
-        user_list.append(line)
-    search_data["data"] = user_list
-    return search_data
+async def get_users(db_session: Annotated[AsyncSession, Depends(get_db_session)]):
+    sql = (select(UserModel))
+    async with db_session.begin():
+        r: Result = await db_session.execute(sql)
+        rd = [k.to_dict() for k in r.scalars().all()]
+    return resp_success_json(rd)
 
-
-@router.delete("/user-info")
-async def del_users(user: UserModel):
-    user.delete()
-    return SUCCESS_DATA

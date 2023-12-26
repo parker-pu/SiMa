@@ -26,12 +26,3 @@ def ja_many_to_many_like(name, like_st: str) -> str:
     :return:
     """
     return " OR ".join(["{} like '%{}%'".format(name, r) for r in like_st.split(",")])
-
-
-# def env_include_self_recover() -> bool:
-#     """
-#     判断是否包含自恢复,从保存的环境变量文件读取
-#     :return:
-#     """
-#     load_env()  # 加载env
-#     return bool(ast.literal_eval(os.getenv("include_self_recover", "True")))

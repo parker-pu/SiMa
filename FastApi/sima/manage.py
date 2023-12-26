@@ -5,8 +5,11 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, Depends
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
-from src import apps
-from src.apps import dynamic_api
+
+from src.apps.dynamic_api.urls import router as dynamic_api_router
+from src.apps.token.urls import router as token_router
+from src.apps.user.urls import router as user_router
+
 from src.apps.user.views import get_current_active_user
 from src.schedule import add_schedule
 from src.settings import HOST, PORT, LOG_LEVEL, MIDDLEWARE, DEBUG, RELOAD, BASE_DIR
@@ -30,13 +33,13 @@ for middleware_name, middleware_data in MIDDLEWARE.items():
 
 # ADD URL
 app.include_router(router)
-app.include_router(dynamic_api.router, prefix="/api")
-app.include_router(apps.first.router, prefix="/api")
-app.include_router(apps.token.router, prefix="/api")
-app.include_router(apps.dashboard.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
-app.include_router(apps.user.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
-app.include_router(apps.dictionary.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
-app.include_router(apps.comment.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+app.include_router(token_router, prefix="/api")
+app.include_router(dynamic_api_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+# app.include_router(apps.first.router, prefix="/api")
+# app.include_router(apps.dashboard.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+app.include_router(user_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+# app.include_router(apps.dictionary.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+# app.include_router(apps.comment.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
 
 
 @app.get("/")
@@ -57,8 +60,8 @@ async def get_static_files_or_404(whatever):
 def init_scheduler():
     """ setup start """
     FastAPICache.init(InMemoryBackend(), prefix="cache_key")
-    add_schedule(scheduler)
-    scheduler.start()
+    # add_schedule(scheduler)
+    # scheduler.start()
 
 
 if __name__ == '__main__':

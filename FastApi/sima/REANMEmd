@@ -27,3 +27,8 @@ alembic revision --autogenerate -m "init"
 ```shell
 alembic upgrade head
 ```
+
+```
+admin
+$2b$12$f1lhqFrOj5EetfB.LU9.v.S80xNySJW0Kh/uzRdCaFsGILlZZbmm6
+```

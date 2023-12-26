@@ -14,7 +14,7 @@ class ErrorBase(BaseModel):
 
 
 # 找不到路径
-ERROR_NOT_FOUND = ErrorBase(code=404, msg="api 路径错误")
+ERROR_NOT_FOUND = ErrorBase(code=404, msg="api 路径错误,或者没有数据")
 # 参数错误
 ERROR_PARAMETER_ERROR = ErrorBase(code=400, msg="参数错误")
 

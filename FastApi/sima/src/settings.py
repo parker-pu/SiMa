@@ -30,10 +30,10 @@ CACHE_TIME = 10
 CURRENT_VERSION = 2023.12  # 当前最新版本
 
 # manage
-HOST = '0.0.0.0'
+HOST = "0.0.0.0"
 PORT = 80
 
-LOG_LEVEL = 'info'
+LOG_LEVEL = "info"
 LOG_PATH = BASE_DIR
 
 # conf

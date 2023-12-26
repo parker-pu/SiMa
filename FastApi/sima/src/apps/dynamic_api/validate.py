@@ -5,6 +5,7 @@
 
 一些公共的验证
 """
+import json
 from enum import Enum
 from typing import Union, Dict, List, Tuple
 
@@ -32,7 +33,7 @@ class TargetDescValidate(BaseModel):
     class TargetInfo(BaseModel):
         target_key: str = Field(title="指标key", description="指标key")
         name: str = Field(title="指标名称", description="指标名称")
-        desc: Union[Dict, str] = Field(None, title="指标描述", description="指标描述")
+        desc: Union[Dict, str] = Field("", title="指标描述", description="指标描述")
 
     zh: List[TargetInfo] = Field(title="中文", description="中文")
     en: List[TargetInfo] = Field(title="英文", description="英文")
@@ -58,3 +59,13 @@ class DynamicApiValidate(BaseModel):
     inner_validate: List[DynamicApiInnerValidateEnum] = Field(title="内部验证器", description="内部保留的验证器")
     custom_validate: List[DynamicApiCustomValidate] = Field(title="自定义验证器", description="自定义的验证器")
     target_desc: TargetDescValidate = Field(title="指标描述", description="指标描述")
+
+    def model_dump_dict(self) -> dict:
+        n = {}
+        for k, v in json.loads(self.model_dump_json()).items():
+            if not isinstance(v, (str, int)):
+                n[k] = json.dumps(v)
+            else:
+                n[k] = v
+        # n.update({"api_status": 0})  # 状态
+        return n

@@ -34,7 +34,7 @@ NEW_DB_PASSWORD = quote(DB_PASSWORD)
 # 连接字符串
 ASYNC_SQLALCHEMY_DATABASE_URL = f"mysql+aiomysql://{DB_USER}:{NEW_DB_PASSWORD}@{DB_HOST}:3306/sima"
 
-async_engine = create_async_engine(ASYNC_SQLALCHEMY_DATABASE_URL)
+async_engine = create_async_engine(ASYNC_SQLALCHEMY_DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(
     bind=async_engine,
     class_=AsyncSession,

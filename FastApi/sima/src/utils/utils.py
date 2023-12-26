@@ -37,3 +37,17 @@ def f_data(field):
         return field
     else:
         return field
+
+
+def delete_dict_none(tp: dict) -> dict:
+    """
+    递归删除字典中的空值
+    :param tp:
+    :return:
+    """
+    for key, value in list(tp.items()):
+        if isinstance(value, dict):
+            delete_dict_none(value)
+        elif (value is None) or (value == ""):
+            del tp[key]
+    return tp

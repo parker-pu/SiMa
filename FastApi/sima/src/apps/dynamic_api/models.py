@@ -25,7 +25,7 @@ class DynamicAPIDataModel(ModelDefault, Base):
     __tablename__ = "dynamic_api_data"
 
     subject_name = Column(String(255), comment="接口所属主题域")
-    api_status = Column(BOOLEAN, default=True, index=True, server_default="1", comment="激活")
+    api_status = Column(BOOLEAN, default=True, index=False, server_default="0", comment="激活")
     api_name = Column(String(255), comment="接口名称")
     api_desc = Column(Text, comment="用于生成接口描述文档")
     api_version = Column(String(255), comment="接口版本")
@@ -37,6 +37,3 @@ class DynamicAPIDataModel(ModelDefault, Base):
 
     def __str__(self):
         return self.subject_name
-
-    def api_json(self):
-        return ""
