@@ -2,23 +2,23 @@ import request from "../utils/request";
 // const qs = require('querystring')
 
 const userApi = {
-  UserInfo: "/api/user/me",
-  UserList: "/api/user/user-info"
+  Me: "/api/user/me/",
+  User: "/api/user/users/",
 };
 
-export function getUserInfoApi() {
+export function getMeApi() {
   return request({
-    url: userApi.UserInfo,
+    url: userApi.Me,
     method: "get",
     headers: {
-      "Content-Type": "application/json;charset=UTF-8"
+      "Content-Type": "application/json;charset=UTF-8",
     }
   });
 }
 
-export function putUserInfoApi(data) {
+export function putMeApi(data) {
   return request({
-    url: userApi.UserInfo,
+    url: userApi.Me,
     method: "put",
     data: data,
     headers: {
@@ -27,10 +27,10 @@ export function putUserInfoApi(data) {
   });
 }
 
-export function delUserInfoApi(data) {
+export function addUserApi(data) {
   return request({
-    url: userApi.UserList,
-    method: "delete",
+    url: userApi.User,
+    method: "post",
     data: data,
     headers: {
       "Content-Type": "application/json;charset=UTF-8"
@@ -38,12 +38,34 @@ export function delUserInfoApi(data) {
   });
 }
 
-export function getUserListApi() {
+export function delUserApi(data) {
   return request({
-    url: userApi.UserList,
+    url: userApi.User + data.id + "/",
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  });
+}
+
+export function putUserApi(data) {
+  return request({
+    url: userApi.User + data.id + "/",
+    method: "put",
+    data: data,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  });
+}
+
+export function getUserApi() {
+  return request({
+    url: userApi.User,
     method: "get",
     headers: {
       "Content-Type": "application/json;charset=UTF-8"
     }
   });
 }
+

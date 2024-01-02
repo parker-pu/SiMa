@@ -46,7 +46,7 @@ const errorHandler = error => {
         name: "login",
         query: { redirect: router.currentRoute.fullPath }
         // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      });
+      })
     } else {
       notification.error({
         message: "错误",
@@ -60,9 +60,11 @@ const errorHandler = error => {
 // request interceptor
 request.interceptors.request.use(config => {
   const token = storage.get(ACCESS_TOKEN);
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInNjb3BlcyI6WyJtZSJdLCJleHAiOjE3MDM3NDk4NTd9.wrHsLJSfc1Mi8Y8F07wDufuDrA5MMASvVT-TXVONC1M";
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
+    console.log(token)
     config.headers.Authorization = "bearer" + " " + token.replace(/'|"/g, ""); // 把token加入到默认请求参数中
   }
   return config;

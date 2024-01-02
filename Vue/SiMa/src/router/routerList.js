@@ -10,12 +10,6 @@ export const routes = [
     breadcrumbName: "Login"
   },
   {
-    path: "/isInit",
-    name: "isInit",
-    component: () => import("@/views/first/SuperUser"),
-    breadcrumbName: "isInit"
-  },
-  {
     path: BASE_PATH,
     name: "Home",
     component: Home,

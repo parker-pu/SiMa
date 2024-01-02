@@ -6,7 +6,8 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = "*"
-pydantic = {extras = ["email"], version = "*"}
+pydantic = "*"
+#pydantic = {extras = ["email"], version = "*"}
 python-multipart = "*"
 python-jose = "*"
 passlib = "*"
@@ -19,8 +20,18 @@ pymysql = "*"
 cryptography = "*"
 apscheduler = "*"
 jinja2 = "*"
+fastapi-cache2 = "*"
+xlsxwriter = "*"
+openpyxl = "*"
+orjson = "*"
+fastapi-pagination = "*"
+sqlalchemy-utils = "*"
+aiomysql = "*"
+greenlet = "*"
+alembic = "*"
+asgiref = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"

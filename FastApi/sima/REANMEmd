@@ -1,0 +1,34 @@
+### SiMa
+
+#### 一些步骤
+- 拉取镜像
+```
+docker pull elasticsearch:7.10.1
+docker pull mysql:8.0.32
+```
+- 运行镜像
+```
+docker run -d --name es_test -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.10.1
+
+docker run --name mysql01 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0.32
+```
+
+
+### 数据库操作
+
+- 更新model
+
+```shell
+alembic revision --autogenerate -m "init"
+```
+
+- 更新表结构到数据
+
+```shell
+alembic upgrade head
+```
+
+```
+admin
+$2b$12$f1lhqFrOj5EetfB.LU9.v.S80xNySJW0Kh/uzRdCaFsGILlZZbmm6
+```

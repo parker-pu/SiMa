@@ -43,7 +43,6 @@
 <script>
 import { mapActions } from "vuex";
 import { timeFix } from "../../utils/util";
-import { isInitApi } from "../../api/superUser";
 
 export default {
   name: "login",
@@ -64,7 +63,9 @@ export default {
       loginForm: {
         // 表单v-moda的值
         username: "",
-        password: ""
+        password: "",
+        grant_type: "password",
+        scope: "me"
       },
       rules: {
         username: [
@@ -86,32 +87,9 @@ export default {
       }
     };
   },
-  created() {
-    this.isInit();
-  },
+  created() {},
   methods: {
     ...mapActions(["Login", "Logout"]),
-    isInit() {
-      isInitApi()
-        .then(rsp => this.initUserSuccess(rsp))
-        .catch()
-        .finally();
-    },
-    initUserSuccess(rsp) {
-      if (rsp === false) {
-        // 跳转到指定的路由
-        this.$router.push({
-          name: "isInit"
-        });
-        // 延迟 1 秒显示欢迎信息
-        setTimeout(() => {
-          this.$notification.warning({
-            message: "初始化",
-            description: "需要初始化"
-          });
-        }, 1000);
-      }
-    },
     onSubmit() {
       this.$refs.refLoginForm
         .validate()
