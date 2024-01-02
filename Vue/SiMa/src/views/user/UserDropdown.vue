@@ -20,7 +20,8 @@
         <template #overlay>
           <a-menu @click="handleMenuClick">
             <a-menu-item key="1"><IdcardOutlined />个人信息</a-menu-item>
-            <a-menu-item key="2" v-if="userInfo.is_superuser">
+            <a-menu-item key="2" v-if="userInfo.superuser">
+            <!-- <a-menu-item key="2"> -->
               <SettingFilled />设置
             </a-menu-item>
             <a-menu-item key="3"><LogoutOutlined />退出</a-menu-item>
@@ -36,13 +37,9 @@
     :visible="visible"
     @close="onClose"
   >
-    <a-button type="primary" @click="onUser" :size="size"
-      ><UserSwitchOutlined />用户操作</a-button
-    >
+    <a-button type="primary" @click="onUser" :size="size"><UserSwitchOutlined />用户操作</a-button>
     <br /><br />
-    <a-button type="primary" @click="onDB" :size="size"
-      ><DatabaseOutlined />数据库操作</a-button
-    >
+    <a-button type="primary" @click="onDB" :size="size"><DatabaseOutlined />数据库操作</a-button>
     <div
       :style="{
         position: 'absolute',
@@ -104,7 +101,7 @@ import {
   UserOutlined
 } from "@ant-design/icons-vue";
 import { mapActions } from "vuex";
-import { getUserInfoApi, putUserInfoApi } from "../../api/user";
+import { getMeApi, putMeApi } from "../../api/user";
 
 export default {
   components: {
@@ -137,7 +134,7 @@ export default {
     editUserInfo() {},
     handleOk() {
       this.loading = true;
-      putUserInfoApi(this.userInfo)
+      putMeApi(this.userInfo)
         .then(() => {
           this.$notification.success({
             message: "修改",
@@ -154,9 +151,10 @@ export default {
       this.visibleUser = false;
     },
     getUserInfoData() {
-      getUserInfoApi()
+      getMeApi()
         .then(rsp => {
           this.userInfo = rsp;
+          console.log(this.userInfo)
         })
         .catch(() => {});
     },
@@ -191,6 +189,7 @@ export default {
       return value < 10 ? "0" + value : value;
     },
     handleMenuClick(e) {
+      this.getUserInfoData();
       console.log("click", e.key);
       switch (e.key) {
         case "1":

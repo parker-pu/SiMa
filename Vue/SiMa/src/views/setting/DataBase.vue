@@ -48,16 +48,7 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-item label="主机地址" name="db_host">
-          <a-input v-model:value="addDBForm.db_host"></a-input>
-        </a-form-item>
-        <a-form-item label="数据库名称" name="db_name">
-          <a-input v-model:value="addDBForm.db_name"></a-input>
-        </a-form-item>
-        <a-form-item label="端口" name="db_port">
-          <a-input v-model:value="addDBForm.db_port"></a-input>
-        </a-form-item>
-        <a-form-item label="数据库类型" name="db_type">
+      <a-form-item label="数据库类型" name="db_type">
           <div>
             <a-select
               v-model:value="addDBForm.db_type"
@@ -68,11 +59,20 @@
               <a-select-option value="mysql">
                 mysql
               </a-select-option>
-              <a-select-option value="es" disabled>
-                es
+              <a-select-option value="postgresql">
+                postgresql
               </a-select-option>
             </a-select>
           </div>
+        </a-form-item>
+        <a-form-item label="主机地址" name="db_host">
+          <a-input v-model:value="addDBForm.db_host"></a-input>
+        </a-form-item>
+        <a-form-item label="端口" name="db_port">
+          <a-input v-model:value="addDBForm.db_port"></a-input>
+        </a-form-item>
+        <a-form-item label="数据库名" name="db_name">
+          <a-input v-model:value="addDBForm.db_name"></a-input>
         </a-form-item>
         <a-form-item label="用户名" name="username">
           <a-input v-model:value="addDBForm.username"></a-input>
@@ -89,7 +89,7 @@
   </a-spin>
 </template>
 <script>
-import { getDBConnApi, addDBConnApi, delDBConnApi } from "../../api/db";
+import { getDBInfoApi,putDBInfoApi, addDBInfoApi, delDBInfoApi } from "../../api/db";
 import { ClearOutlined, EditOutlined } from "@ant-design/icons-vue";
 export default {
   components: {
@@ -148,11 +148,11 @@ export default {
   },
   methods: {
     getDBConnList() {
-      getDBConnApi()
+      getDBInfoApi()
         .then(rsp => {
           // then 指成功之后的回调 (注意：使用箭头函数，可以不考虑this指向)
           this.dataSource = rsp.data;
-          this.count = rsp.total_nums;
+          this.count = this.dataSource.length;
         })
         .catch(error => {
           // catch 指请求出错的处理
@@ -161,7 +161,7 @@ export default {
     },
     onDelete(line) {
       this.spinning = true;
-      delDBConnApi(line)
+      delDBInfoApi(line)
         .then(res => this.delSuccess(res))
         .catch(err => this.delFailed(err))
         .finally(() => {});
@@ -192,6 +192,8 @@ export default {
       this.spinning = false;
     },
     handleAdd() {
+      this.addDBForm = {}
+      this.edidTitle = "新增";
       this.visible = true;
     },
     resetCancel() {
@@ -199,13 +201,15 @@ export default {
     },
     handleOk() {
       this.loading = true;
-      this.addDB();
+      this.addOrUpdateDB();
     },
     handleCancel() {
       this.visible = false;
     },
-    addDB() {
-      addDBConnApi(this.addDBForm)
+    addOrUpdateDB() {
+      var d  = addDBInfoApi
+      if(this.edidTitle == "编辑"){d = putDBInfoApi}
+      d(this.addDBForm)
         .then(res => this.addSuccess(res))
         .catch(err => this.addFailed(err))
         .finally(() => {});

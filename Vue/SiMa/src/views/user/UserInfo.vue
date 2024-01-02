@@ -16,7 +16,7 @@
           />
         </span>
       </template>
-      <template #is_superuser="{ text }">
+      <template #superuser="{ text }">
         <span>
           <CloseCircleOutlined
             v-if="text === false"
@@ -38,14 +38,10 @@
             cancel-text="否"
             @confirm="onDelete(record)"
           >
-            <a-button type="danger" size="default"
-              ><ClearOutlined /> 删除</a-button
-            >
+            <a-button type="danger" size="default"><ClearOutlined /> 删除</a-button>
           </a-popconfirm>
           <!-- edit -->
-          <a-button size="default" @click="editUser(record)"
-            ><EditOutlined />编辑</a-button
-          >
+          <a-button size="default" @click="editUser(record)"><EditOutlined />编辑</a-button>
         </a-space>
       </template>
     </a-table>
@@ -83,8 +79,8 @@
         <a-form-item label="失效" name="disabled">
           <a-switch v-model:checked="addUser.disabled" />
         </a-form-item>
-        <a-form-item label="超级用户" name="is_superuser">
-          <a-switch v-model:checked="addUser.is_superuser" />
+        <a-form-item label="超级用户" name="superuser">
+          <a-switch v-model:checked="addUser.superuser" />
         </a-form-item>
         <a-form-item label="密码" name="password">
           <a-input-password
@@ -99,7 +95,7 @@
 </template>
 
 <script>
-import { getUserListApi, putUserInfoApi, delUserInfoApi } from "../../api/user";
+import { getUserApi, putUserApi,addUserApi, delUserApi } from "../../api/user";
 import {
   CloseCircleOutlined,
   EditOutlined,
@@ -147,8 +143,8 @@ export default {
         },
         {
           title: "超级用户",
-          dataIndex: "is_superuser",
-          slots: { customRender: "is_superuser" }
+          dataIndex: "superuser",
+          slots: { customRender: "superuser" }
         },
         {
           title: "更新时间",
@@ -167,11 +163,13 @@ export default {
   },
   methods: {
     handleAdd() {
+      this.edidTitle= "新增"
       this.visible = true;
+      this.addUser = {}
     },
     onDelete(line) {
       this.useSpinning = true;
-      delUserInfoApi(line)
+      delUserApi(line)
         .then(res => this.delSuccess(res))
         .catch(err => this.delFailed(err))
         .finally(() => {});
@@ -208,7 +206,9 @@ export default {
     },
     handleOk() {
       this.loading = true;
-      putUserInfoApi(this.addUser)
+      var pa = putUserApi
+      if(this.edidTitle == "新增"){pa = addUserApi}
+      pa(this.addUser)
         .then(() => this.getUserList())
         .catch()
         .finally(() => {
@@ -227,10 +227,10 @@ export default {
     getUserList() {
       this.useSpinning = true;
       setTimeout(() => {
-        getUserListApi()
+        getUserApi()
           .then(rsp => {
             this.dataSource = rsp.data;
-            this.count = rsp.total_nums;
+            this.count = this.dataSource.length;
           })
           .catch(() => {})
           .finally(() => {

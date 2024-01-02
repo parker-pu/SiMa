@@ -1,13 +1,45 @@
 import request from "../utils/request";
-// const qs = require('querystring')
 
-const dictionary = {
-  dbConn: "api/dictionary/db-conn"
+const database = {
+  database: "/api/database/databases/"
 };
 
-export function getDBConnApi() {
+export function addDBInfoApi(data) {
+  console.log(data)
   return request({
-    url: dictionary.dbConn,
+    url: database.database,
+    method: "post",
+    data: data,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  });
+}
+
+export function delDBInfoApi(data) {
+  return request({
+    url: database.database + data.id + "/",
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  });
+}
+
+export function putDBInfoApi(data) {
+  return request({
+    url: database.database + data.id + "/",
+    method: "put",
+    data: data,
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+  });
+}
+
+export function getDBInfoApi() {
+  return request({
+    url: database.database,
     method: "get",
     headers: {
       "Content-Type": "application/json;charset=UTF-8"
@@ -15,24 +47,3 @@ export function getDBConnApi() {
   });
 }
 
-export function addDBConnApi(parameter) {
-  return request({
-    url: dictionary.dbConn,
-    method: "put",
-    data: parameter,
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8"
-    }
-  });
-}
-
-export function delDBConnApi(parameter) {
-  return request({
-    url: dictionary.dbConn,
-    method: "delete",
-    data: parameter,
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8"
-    }
-  });
-}
