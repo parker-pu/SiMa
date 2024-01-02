@@ -5,12 +5,10 @@
 
 异步mysql
 """
-import json
+from typing import AsyncIterable
 
 from sqlalchemy import create_engine
-from datetime import date, datetime
 from urllib.parse import quote
-from _decimal import Decimal
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.asyncio import (
@@ -44,7 +42,7 @@ SessionLocal = sessionmaker(
 
 
 # 运用 yield 抛出session
-async def get_db_session() -> AsyncSession:
+async def get_db_session() -> (AsyncIterable, AsyncSession):
     """
     异步数据库会话
     """

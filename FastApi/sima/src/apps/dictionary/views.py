@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 import uuid
+from typing import Annotated
 
+from fastapi import Depends
+from sqlalchemy import select, Result
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.apps.databases.models import DataBasesModel
 from src.apps.dictionary.models import (
     ScanConnDBSettingModel,
     NewTableModel,
     SearchModel,
-    HistoryTableColumnModel
+    HistoryTableColumnModel, ScanTBModel
 )
+from src.utils.db.aiodb import get_db_session
 from src.utils.rdbms_model import DBStatus, RDBMModel
 from src.utils.utils import gen_md5
 from src.utils.log import logger
@@ -123,3 +130,69 @@ def sync_data_view():
 async def search_table_list_view(dada: str = None):
     search_data = SearchModel().search(search_data=dada)
     return search_data
+
+
+async def scan_database_table():
+    """
+    sync database data
+    :return:
+    """
+    async for db_session in get_db_session():
+        async with ((db_session.begin())):
+            sql = select(DataBasesModel).where(DataBasesModel.use_status == "1")
+            r: Result = await db_session.execute(sql)
+            for row in r.scalars().all():
+                if not isinstance(row, DataBasesModel):
+                    continue
+
+                # 获取存储的数据库连接,然后扫描出所有的表数据
+                db_tables = {}
+                for row_tb_data in row.show_dbs_table(row.db_name):
+                    # 对比表是否更改
+                    stb_sql = select(ScanTBModel).where(
+                        (ScanTBModel.db_id == str(row_tb_data.get("db_id"))) &
+                        (ScanTBModel.db_name == str(row_tb_data.get("db_name"))) &
+                        (ScanTBModel.table_name == str(row_tb_data.get("table_name"))),
+                    )
+                    stb: Result = await db_session.execute(stb_sql)
+                    new_stb: ScanTBModel = stb.scalars().first()
+
+                    add_column, up_column, del_column = [], [], []  # 哪些列不相同
+                    if new_stb:
+                        # 说明存在这张表,那么就对比保存记录
+                        if new_stb.table_md5 != row_tb_data.get("table_md5"):
+                            add_column, up_column, del_column = compared_column(
+                                row_tb_data.get("table_col"),
+                                new_stb.last_data,
+                                row_tb_data.get("table_col_key")
+                            )
+
+                        ast = ScanTBModel()
+                        for _ak in ["db_id", "db_name", "table_name", "table_desc", "table_md5"]:
+                            setattr(ast, _ak, str())
+                        db_session.add(ast)
+                    else:
+                        add_column = [k.get("COLUMN_NAME") for k in row_tb_data.get("table_col")]
+
+                        ast = ScanTBModel()
+                        for _ak in ["db_id", "db_name", "table_name", "table_desc", "table_md5"]:
+                            setattr(ast, _ak, str())
+                        db_session.add(ast)
+
+
+                    print(new_stb)
+                    print(row_tb_data)
+                    print("------------------")
+                # with row.to_conn().begin():
+                #     sql = "show database"
+                #     r: Result = await db_session.execute(sql)
+                #     print(r)
+                # print("---------------------")
+                # print(type(row))
+                # print(row)
+    # for item in ScanConnDBSettingModel().all_list().get("data", []):
+    #     scan_db = ScanConnDBSettingModel(**item)
+    #     if scan_db.db_type.mysql == "mysql":
+    #         scan_mysql(scan_db)
+    # logger.info("scan success")
+    return "ok"

@@ -10,6 +10,7 @@ from src.utils.db.aiodb import Base, SQLALCHEMY_DATABASE_URL
 # 需要引入各自app的model
 from src.apps.dynamic_api import models
 from src.apps.user import models
+from src.apps.databases import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

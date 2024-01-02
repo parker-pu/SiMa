@@ -47,3 +47,17 @@ class UserValidate(BaseModel):
 
     def __str__(self):
         return self.username
+
+
+class UserInfoValidate(UserValidate):
+    password: Optional[str] = None
+
+    def model_dump(self, **kwargs) -> dict[str, Any]:
+        m = super().model_dump()
+        if self.password and self.password != "":
+            m.update({"password": gen_password_hash(self.password)})
+        m.pop("update_time") if "update_time" in m else None
+        return m
+
+    def __str__(self):
+        return self.username

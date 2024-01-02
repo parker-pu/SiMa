@@ -1,35 +1,13 @@
 # -*- coding: utf-8 -*-
-from typing import Optional
-from pydantic import BaseModel, Field
 from sqlalchemy import Column, String, BOOLEAN
 
 from src.utils.db.aiodb import Base
 from src.utils.db.model import ModelDefault
-from src.utils.es_model import EsModel
-from src.utils.passwd import gen_password_hash
 
-
-# class UserModel(EsModel):
-#     _index_name = "users"
-#     _pk_no_arr = ["username"]
-#     username: Optional[str] = "admin"
-#     email: Optional[str] = 'admin@admin.com'
-#     # email: Optional[EmailStr] = 'admin@admin.com'
-#     full_name: Optional[str] = None
-#     disabled: Optional[bool] = False
-#     is_superuser: Optional[bool] = True
-#
-#
-# class UserInDBMode(UserModel):
-#     hashed_password: Optional[str] = Field("admin", alias="password")
-#
-#     def save(self) -> True:
-#         self.hashed_password = gen_password_hash(self.hashed_password)
-#         super().save()
 
 class UserModel(ModelDefault, Base):
     """
-    API 接口数据
+    用户
     """
     __tablename__ = "users"
 

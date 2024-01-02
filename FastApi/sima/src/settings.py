@@ -14,7 +14,11 @@ SECRET_KEY = 'wpdx&o!@(mt$xacf^p+o+3nn*h!y6_7x3%d=a0^go8b7_69dw6'
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
-ORIGINS = ["*"]
+ORIGINS = [
+    "*",
+    "http://127.0.0.1:3000",  # React
+    "http://127.0.0.1:8080"
+]  # Vue]
 
 DEBUG = True
 RELOAD = True

@@ -9,6 +9,8 @@ from starlette.staticfiles import StaticFiles
 from src.apps.dynamic_api.urls import router as dynamic_api_router
 from src.apps.token.urls import router as token_router
 from src.apps.user.urls import router as user_router
+from src.apps.databases.urls import router as db_router
+from src.apps.dictionary.urls import router as dictionary_router
 
 from src.apps.user.views import get_current_active_user
 from src.schedule import add_schedule
@@ -35,10 +37,12 @@ for middleware_name, middleware_data in MIDDLEWARE.items():
 app.include_router(router)
 app.include_router(token_router, prefix="/api")
 app.include_router(dynamic_api_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+app.include_router(user_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+app.include_router(db_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+app.include_router(dictionary_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
+
 # app.include_router(apps.first.router, prefix="/api")
 # app.include_router(apps.dashboard.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
-app.include_router(user_router, prefix="/api", dependencies=[Depends(get_current_active_user)])
-# app.include_router(apps.dictionary.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
 # app.include_router(apps.comment.router, prefix="/api", dependencies=[Depends(get_current_active_user)])
 
 

@@ -2,7 +2,10 @@
 import json
 from typing import Optional, Sequence, Any
 from pydantic import IPvAnyAddress, BaseModel
+from sqlalchemy import Column, String, BOOLEAN, TEXT, insert
 
+from src.utils.db.aiodb import Base
+from src.utils.db.model import ModelDefault
 from src.utils.es_model import EsModel
 from src.utils.rdbms_model import DBEnum, DBStatus
 
@@ -104,3 +107,68 @@ class HistoryTableColumnModel(TableBaseModel, EsModel):
         except Exception as e:
             self._Logger.error(e)
             return False
+
+
+class ScanDBHistoryModel(ModelDefault, Base):
+    """
+    扫描数据库历史记录
+    """
+    __tablename__ = "scan_db_history"
+
+    db_id = Column(String(255), index=True, comment="数据库ID")
+    db_name = Column(String(255), index=True, comment="数据库名称")
+    add_table = Column(TEXT, comment="新增表")
+    up_table = Column(TEXT, comment="更新表")
+    del_table = Column(TEXT, comment="删除表")
+    other = Column(TEXT, comment="其他")
+
+
+class ScanTBModel(ModelDefault, Base):
+    """
+    扫描数据表历史记录
+    """
+    __tablename__ = "scan_table"
+
+    db_id = Column(String(255), index=True, comment="数据库ID")
+    db_name = Column(String(255), index=True, comment="数据库名称")
+    table_name = Column(String(255), index=True, comment="表名称")
+    table_desc = Column(TEXT, comment="表描述")
+    table_md5 = Column(String(255), comment="表md5")
+    table_status = Column(BOOLEAN, default=True, nullable=True, comment="表状态")
+    other = Column(String(255), comment="其他")
+
+    def insert_or_update_sql(self, db_type="mysql"):
+        stmt, new_insert = None, None
+        if db_type == "mysql":
+            from sqlalchemy.dialects.mysql import insert
+            new_insert = insert
+
+        stmt = new_insert(ScanTBModel).values(
+            db_id=self.db_id,
+            db_name=self.db_name,
+            table_name=self.table_name,
+            table_desc=self.table_desc,
+            table_md5=self.table_md5,
+            table_status=self.table_status,
+            other=self.other
+        )
+        if db_type == "mysql":
+            stmt = stmt.on_duplicate_key_update(table_md5=self.table_md5)
+
+        return stmt
+
+
+class ScanTBHistoryModel(ModelDefault, Base):
+    """
+    扫描数据表历史记录
+    """
+    __tablename__ = "scan_table_history"
+
+    db_id = Column(String(255), index=True, comment="数据库ID")
+    db_name = Column(String(255), index=True, comment="数据库名称")
+    table_name = Column(String(255), index=True, comment="表名称")
+    last_data = Column(TEXT, comment="上次扫描的数据")
+    add_column = Column(TEXT, comment="新增字段")
+    up_column = Column(TEXT, comment="更新字段")
+    del_column = Column(TEXT, comment="删除字段")
+    other = Column(TEXT, comment="其他")
